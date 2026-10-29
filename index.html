@@ -1,0 +1,786 @@
+<!doctype html>
+<title>Allyship Solutions</title>
+<style>
+  :root{
+    --paper:#F7F3E8;
+    --paper-line:#E3D8B8;
+    --ink:#0D3326;
+    --ink-soft:#3C4F42;
+    --rule:#D2C49C;
+    --patina:#B9924A;
+    --patina-deep:#7A5A22;
+    --brass:#A97F1E;
+    --brass-bg:#F6ECD4;
+    --card:#FCFAF2;
+    --forest:#0C2A1F;
+    --shadow: 0 1px 0 rgba(13,51,38,0.07);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#0B2A1F;
+      --paper-line:#1E3D2E;
+      --ink:#F3ECD8;
+      --ink-soft:#BFD0C2;
+      --rule:#2E4A3A;
+      --patina:#F0D99A;
+      --patina-deep:#E3C47E;
+      --brass:#E6C47E;
+      --brass-bg:#16281B;
+      --card:#0F2C21;
+      --shadow: 0 1px 0 rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0B2A1F;
+    --paper-line:#1E3D2E;
+    --ink:#F3ECD8;
+    --ink-soft:#BFD0C2;
+    --rule:#2E4A3A;
+    --patina:#F0D99A;
+    --patina-deep:#E3C47E;
+    --brass:#E6C47E;
+    --brass-bg:#16281B;
+    --card:#0F2C21;
+    --shadow: 0 1px 0 rgba(0,0,0,0.35);
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .serif{
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  }
+  .mono{
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  h1,h2,h3{
+    font-weight:600;
+    text-wrap:balance;
+    margin:0;
+  }
+  a{color:inherit;}
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+  .rule{
+    border:none;
+    border-top:1px solid var(--rule);
+    margin:0;
+  }
+
+  /* ambient plat-map background lines, drawn once behind the hero */
+  .plat{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .plat svg{width:100%;height:100%;display:block;}
+
+  header.top{
+    position:relative;
+    z-index:2;
+  }
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px 28px;
+    max-width:920px;
+    margin:0 auto;
+  }
+  .wordmark{
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    font-size:1.05rem;
+    letter-spacing:0.01em;
+  }
+  .wordmark b{font-weight:700;}
+  .topnav{
+    display:flex;
+    gap:26px;
+    font-size:0.92rem;
+    color:var(--ink-soft);
+  }
+  .topnav a{text-decoration:none;}
+  .topnav a:hover{color:var(--patina-deep);}
+  .topnav a:focus-visible, .cta:focus-visible, .chip:focus-visible{
+    outline:2px solid var(--patina);
+    outline-offset:3px;
+  }
+  @media (max-width:640px){ .topnav{display:none;} }
+
+  .hero{
+    position:relative;
+    padding:64px 0 76px;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:44px;
+    align-items:center;
+  }
+  @media (max-width:760px){ .hero-grid{grid-template-columns:1fr; gap:32px;} }
+  .hero-video{
+    margin:0;
+    border:1px solid var(--rule);
+    background:var(--card);
+  }
+  .hero-video video{
+    width:100%;
+    display:block;
+    background:#000;
+  }
+  .hero-video figcaption{
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:0.7rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    padding:9px 11px;
+    border-top:1px solid var(--rule);
+  }
+  .kicker{
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:0.78rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--patina-deep);
+    margin-bottom:18px;
+    display:block;
+  }
+  h1.headline{
+    font-size:clamp(2rem, 3.6vw, 2.9rem);
+    line-height:1.1;
+    letter-spacing:-0.01em;
+  }
+  .sub{
+    margin-top:22px;
+    max-width:52ch;
+    font-size:1.1rem;
+    color:var(--ink-soft);
+  }
+  .tagline{
+    margin-top:16px;
+    max-width:46ch;
+    font-style:italic;
+    font-size:0.98rem;
+    color:var(--patina-deep);
+  }
+  .cta-row{
+    margin-top:34px;
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .cta{
+    display:inline-block;
+    padding:12px 22px;
+    border-radius:2px;
+    text-decoration:none;
+    font-size:0.95rem;
+    font-weight:600;
+    border:1px solid transparent;
+    transition:transform 0.15s ease, background 0.15s ease;
+  }
+  .cta.primary{
+    background:var(--forest);
+    color:var(--brass);
+  }
+  .cta.primary:hover{background:var(--brass); color:var(--forest);}
+  .cta.ghost{
+    border-color:var(--ink);
+    color:var(--ink);
+  }
+  .cta.ghost:hover{border-color:var(--patina-deep); color:var(--patina-deep);}
+  @media (prefers-reduced-motion:no-preference){
+    .cta:active{transform:translateY(1px);}
+  }
+
+  .proof{
+    position:relative;
+    z-index:2;
+    padding:22px 0;
+    border-top:1px solid var(--paper-line);
+    border-bottom:1px solid var(--paper-line);
+  }
+  .proof .wrap{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+  }
+  @media (max-width:640px){ .proof .wrap{grid-template-columns:1fr; gap:16px;} }
+  .proof-item{font-size:0.92rem; color:var(--ink-soft);}
+  .proof-item b{color:var(--ink); font-weight:600;}
+
+  section.article{
+    padding:64px 0;
+  }
+  .article-head{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    margin-bottom:34px;
+  }
+  .article-num{
+    font-family:"Iowan Old Style",Palatino,Georgia,serif;
+    font-style:italic;
+    color:var(--brass);
+    font-size:1.1rem;
+    white-space:nowrap;
+  }
+  .article-head h2{
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    font-size:1.7rem;
+  }
+
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+  }
+  @media (max-width:720px){ .steps{grid-template-columns:1fr;} }
+  .step{
+    padding-top:16px;
+    border-top:2px solid var(--patina-deep);
+  }
+  .step h3{
+    font-size:1.02rem;
+    margin-bottom:8px;
+  }
+  .step p{
+    margin:0;
+    color:var(--ink-soft);
+    font-size:0.95rem;
+  }
+
+  .formula{
+    margin-top:40px;
+    background:var(--brass-bg);
+    border:1px solid var(--brass);
+    padding:22px 26px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    flex-wrap:wrap;
+  }
+  .formula .label{
+    font-size:0.78rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .formula .expr{
+    font-size:1.15rem;
+    font-weight:600;
+    color:var(--ink);
+  }
+
+  .criteria-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1px;
+    background:var(--rule);
+    border:1px solid var(--rule);
+  }
+  @media (max-width:640px){ .criteria-grid{grid-template-columns:1fr;} }
+  .criteria-cell{
+    background:var(--card);
+    padding:20px 22px;
+  }
+  .criteria-cell .label{
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--patina-deep);
+    display:block;
+    margin-bottom:8px;
+  }
+  .criteria-cell p{margin:0; color:var(--ink-soft); font-size:0.95rem;}
+  .criteria-cell strong{color:var(--ink); font-weight:600;}
+
+  .lanes{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+  }
+  @media (max-width:720px){ .lanes{grid-template-columns:1fr;} }
+  .lane{
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    padding:26px 24px;
+    box-shadow:var(--shadow);
+  }
+  .lane h3{
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    font-size:1.2rem;
+    margin-bottom:10px;
+  }
+  .lane p{
+    color:var(--ink-soft);
+    font-size:0.95rem;
+    margin:0 0 18px;
+  }
+  .lane a.cta{padding:10px 18px; font-size:0.9rem;}
+  .roadmap-tag{
+    display:inline-block;
+    margin-left:8px;
+    padding:3px 9px;
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:0.62rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    font-weight:600;
+    color:var(--patina-deep);
+    border:1px solid var(--rule);
+    vertical-align:middle;
+  }
+
+  .reviews-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+  }
+  @media (max-width:720px){ .reviews-grid{grid-template-columns:1fr;} }
+  .review-card{
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    padding:22px 24px;
+    box-shadow:var(--shadow);
+  }
+  .review-card .mark{
+    display:block;
+    font-family:"Iowan Old Style",Palatino,Georgia,serif;
+    color:var(--brass);
+    font-size:1.8rem;
+    line-height:1;
+    margin-bottom:6px;
+  }
+  .review-card .quote{
+    margin:0;
+    color:var(--ink);
+    font-style:italic;
+    font-size:0.98rem;
+    line-height:1.5;
+  }
+  .review-card .byline{
+    margin-top:14px;
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--patina-deep);
+  }
+  .review-admin{
+    margin-top:28px;
+    padding-top:24px;
+    border-top:1px dashed var(--rule);
+  }
+  .review-admin .label{
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--patina-deep);
+    display:block;
+    margin-bottom:12px;
+  }
+  .review-form{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    max-width:480px;
+  }
+  .review-form input, .review-form textarea{
+    padding:10px 12px;
+    border:1px solid var(--rule);
+    background:var(--paper);
+    color:var(--ink);
+    font:inherit;
+    font-size:0.92rem;
+  }
+  .review-form textarea{min-height:90px; resize:vertical;}
+  .review-form input:focus-visible, .review-form textarea:focus-visible{outline:2px solid var(--patina); outline-offset:2px;}
+  .review-form button{align-self:flex-start;}
+
+  .ask-box{
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    padding:24px;
+    box-shadow:var(--shadow);
+  }
+  .ask-log{
+    max-height:320px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .ask-log:not(:empty){margin-bottom:16px;}
+  .ask-msg{
+    max-width:80%;
+    padding:10px 14px;
+    font-size:0.92rem;
+    line-height:1.45;
+    white-space:pre-wrap;
+  }
+  .ask-msg.user{
+    align-self:flex-end;
+    background:var(--forest);
+    color:var(--brass);
+  }
+  .ask-msg.assistant{
+    align-self:flex-start;
+    background:var(--paper);
+    border:1px solid var(--paper-line);
+    color:var(--ink);
+  }
+  .ask-msg.system{
+    align-self:center;
+    max-width:100%;
+    text-align:center;
+    background:none;
+    border:1px dashed var(--rule);
+    color:var(--ink-soft);
+    font-size:0.85rem;
+  }
+  .ask-form{
+    display:flex;
+    gap:10px;
+  }
+  .ask-form input{
+    flex:1;
+    min-width:0;
+    padding:11px 14px;
+    border:1px solid var(--rule);
+    background:var(--paper);
+    color:var(--ink);
+    font:inherit;
+    font-size:0.95rem;
+  }
+  .ask-form input:focus-visible{outline:2px solid var(--patina); outline-offset:2px;}
+  .ask-form input:disabled{opacity:0.6;}
+  .cta:disabled{opacity:0.5; cursor:not-allowed;}
+  .cta:disabled:hover{background:var(--forest); color:var(--brass);}
+  .ask-note{
+    margin:16px 0 0;
+    font-size:0.82rem;
+    color:var(--ink-soft);
+  }
+  .ask-note a{color:var(--patina-deep); text-decoration:underline; text-decoration-color:var(--rule); text-underline-offset:2px;}
+
+  .founder{
+    display:flex;
+    gap:22px;
+    align-items:flex-start;
+  }
+  .founder .mark{
+    font-family:"Iowan Old Style",Palatino,Georgia,serif;
+    font-size:2.4rem;
+    color:var(--brass);
+    line-height:1;
+  }
+  .founder p{
+    color:var(--ink-soft);
+    max-width:56ch;
+    margin:0;
+  }
+  .founder p + p{margin-top:12px;}
+  .founder .sign{
+    margin-top:16px;
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    font-style:italic;
+    color:var(--ink);
+  }
+
+  footer{
+    padding:40px 0 60px;
+    border-top:1px solid var(--paper-line);
+  }
+  .bizcard{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    flex-wrap:wrap;
+    padding:20px 22px;
+    margin-bottom:28px;
+    border:1px solid var(--paper-line);
+    background:var(--card);
+    box-shadow:var(--shadow);
+  }
+  .bizcard-avatar{
+    width:150px;
+    height:auto;
+    flex-shrink:0;
+    display:block;
+    border:1px solid var(--rule);
+  }
+  .bizcard-text{flex:1; min-width:200px;}
+  .bizcard-text .label{
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:0.7rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--patina-deep);
+    display:block;
+  }
+  .bizcard-text p{margin:4px 0 0; color:var(--ink-soft); font-size:0.92rem;}
+  .bizcard a.cta{flex-shrink:0; padding:10px 18px; font-size:0.9rem;}
+  .foot-grid{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:20px;
+    font-size:0.88rem;
+    color:var(--ink-soft);
+  }
+  .foot-grid a{text-decoration:underline; text-decoration-color:var(--rule); text-underline-offset:3px;}
+  .foot-grid a:hover{color:var(--patina-deep); text-decoration-color:var(--patina-deep);}
+  .note{
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    margin-top:26px;
+    padding:14px 16px;
+    border:1px dashed var(--rule);
+    background:var(--card);
+  }
+</style>
+
+<header class="top">
+  <div class="topbar">
+    <div class="wordmark"><b>Allyship</b> Solutions</div>
+    <nav class="topnav">
+      <a href="#criteria">Investment Criteria</a>
+      <a href="#partners">Capital Partners</a>
+      <a href="#submit">Submit a Deal</a>
+      <a href="#ask">Ask a Question</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="plat" aria-hidden="true">
+    <svg viewBox="0 0 920 520" preserveAspectRatio="none">
+      <g stroke="var(--rule)" stroke-width="1" opacity="0.55">
+        <line x1="0" y1="60" x2="920" y2="60"/>
+        <line x1="0" y1="220" x2="920" y2="180"/>
+        <line x1="0" y1="420" x2="920" y2="470"/>
+        <line x1="180" y1="0" x2="140" y2="520"/>
+        <line x1="640" y1="0" x2="700" y2="520"/>
+      </g>
+      <g stroke="var(--brass)" stroke-width="1.2" opacity="0.5" fill="none">
+        <polygon points="600,140 820,120 860,300 660,340"/>
+      </g>
+    </svg>
+  </div>
+  <div class="wrap" style="position:relative;">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <span class="kicker">Richmond, VA &mdash; Real Estate Deal Sourcing</span>
+        <h1 class="headline serif">Disciplined deal flow for people who put capital to work.</h1>
+        <p class="sub">Allyship Solutions sources, underwrites, and structures real estate opportunities in the Richmond, VA market &mdash; then brings them to a small network of private lenders and investors before they go anywhere else.</p>
+        <p class="tagline serif">The name is the point: sourcing, capital, and execution standing on the same side of the table, not across from each other.</p>
+        <div class="cta-row">
+          <a class="cta primary" href="#partners">Become a Capital Partner</a>
+          <a class="cta ghost" href="#submit">Submit a Deal</a>
+        </div>
+      </div>
+      <figure class="hero-video">
+        <video src="assets/founder-intro.mp4" autoplay loop muted playsinline controls preload="metadata"></video>
+        <figcaption>Adam B. Stevens &mdash; Founder, Allyship Solutions</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="proof">
+  <div class="wrap">
+    <div class="proof-item"><b>Richmond &amp; Central VA</b><br>focused geography, not a national spray</div>
+    <div class="proof-item"><b>Purchase &amp; sale agreements</b><br>drafted with assignment and inspection clauses in place</div>
+    <div class="proof-item"><b>Formed &amp; operating</b><br>Allyship Solutions, LLC</div>
+  </div>
+</section>
+
+<section class="article" id="how">
+  <div class="wrap">
+    <div class="article-head">
+      <span class="article-num serif">Article I</span>
+      <h2>How a deal moves through Allyship</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h3>Source</h3>
+        <p>Off-market and on-market leads are pulled from direct outreach, agent relationships, and an open property-submission channel &mdash; not mass-marketed lists.</p>
+      </div>
+      <div class="step">
+        <h3>Underwrite</h3>
+        <p>Every property is run through the same repair-adjusted offer formula before it's presented to anyone. No deal skips the math.</p>
+      </div>
+      <div class="step">
+        <h3>Structure &amp; close</h3>
+        <p>Assignment, wholesale, or JV &mdash; whichever structure fits the deal and the capital behind it, documented with a standing purchase &amp; sale template.</p>
+      </div>
+    </div>
+    <div class="formula">
+      <span class="label mono">Standing offer formula</span>
+      <span class="expr mono">Max Offer&nbsp;=&nbsp;(ARV &times; 0.70) &minus; Repairs</span>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="article" id="criteria">
+  <div class="wrap">
+    <div class="article-head">
+      <span class="article-num serif">Article II</span>
+      <h2>Investment criteria</h2>
+    </div>
+    <div class="criteria-grid">
+      <div class="criteria-cell">
+        <span class="label">Geography</span>
+        <p><strong>Richmond, VA and the surrounding Central Virginia MSA.</strong> We know these streets &mdash; we don't underwrite outside them.</p>
+      </div>
+      <div class="criteria-cell">
+        <span class="label">Property types</span>
+        <p><strong>Single-family, small multifamily, and select land plays</strong> (including adaptive-use opportunities where the numbers support it).</p>
+      </div>
+      <div class="criteria-cell">
+        <span class="label">Deal structure</span>
+        <p><strong>Wholesale assignment, double close, or joint venture</strong> &mdash; matched to what the seller needs and what the capital partner wants.</p>
+      </div>
+      <div class="criteria-cell">
+        <span class="label">Condition</span>
+        <p><strong>Value-add and distressed preferred.</strong> Repair scope is estimated up front, not discovered after close.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="article" id="partners">
+  <div class="wrap">
+    <div class="article-head">
+      <span class="article-num serif">Article III</span>
+      <h2>Two ways to ally with us</h2>
+    </div>
+    <div class="lanes">
+      <div class="lane">
+        <h3 class="serif">Capital partners &amp; lenders</h3>
+        <p>Get first look at underwritten opportunities before they're shopped elsewhere. You see the repair estimate, the offer math, and the structure up front &mdash; not a sales pitch after the fact.</p>
+        <a class="cta primary" href="#contact">Request the deal criteria packet</a>
+      </div>
+      <div class="lane" id="submit">
+        <h3 class="serif">Sellers &amp; wholesalers</h3>
+        <p>Have a property in the Richmond area that needs to move? Submit the details and it goes straight into the underwriting queue &mdash; no cold calls, no runaround.</p>
+        <a class="cta ghost" href="#contact">Submit property details</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="article" id="roadmap">
+  <div class="wrap">
+    <div class="article-head">
+      <span class="article-num serif">Article IV</span>
+      <h2>Where this is headed</h2>
+    </div>
+    <p class="tagline serif" style="margin-bottom:28px;">Allyship starts as the connector between deals and capital. As lending capacity builds, these move from roadmap to live service.</p>
+    <div class="lanes">
+      <div class="lane">
+        <h3 class="serif">EMD Deposit Funding <span class="roadmap-tag">In development</span></h3>
+        <p>Once live: Allyship puts up the earnest money deposit on qualifying deals, so your contract stays alive while you line up your end buyer or financing.</p>
+      </div>
+      <div class="lane">
+        <h3 class="serif">Double Closing Funding <span class="roadmap-tag">In development</span></h3>
+        <p>Virginia often requires a double close rather than a simple assignment. Once live: transactional funding for the A-to-B side, so your end buyer never sees your contract price and your spread stays private.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="article" id="ask">
+  <div class="wrap">
+    <div class="article-head">
+      <span class="article-num serif">Article V</span>
+      <h2>Ask a question</h2>
+    </div>
+    <div class="ask-box">
+      <p class="ask-note" style="margin-top:0;">Have a question about criteria, process, or how this works? Send it directly &mdash; real answers, no bot.</p>
+      <a class="cta primary" href="mailto:info@allyshipsolutionsllc.com?subject=Question%20for%20Allyship%20Solutions">Email a question</a>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="article" id="reviews">
+  <div class="wrap">
+    <div class="article-head">
+      <span class="article-num serif">Article VI</span>
+      <h2>What clients say</h2>
+    </div>
+    <div class="reviews-grid">
+      <!-- Reviews are added here by hand as clients give them. Copy the block below per review:
+      <div class="review-card">
+        <span class="mark" aria-hidden="true">&ldquo;</span>
+        <p class="quote">Quote goes here.</p>
+        <div class="byline">Name &mdash; Role</div>
+      </div>
+      -->
+    </div>
+    <div class="note">No reviews yet &mdash; the first ones from capital partners and sellers will appear here.</div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="article" id="founder">
+  <div class="wrap">
+    <div class="founder">
+      <span class="mark" aria-hidden="true">&ldquo;</span>
+      <div>
+        <p>Allyship Solutions is built and run by <strong>Adam B. Stevens</strong>, based in Richmond, VA. The approach is deliberately narrow: one market, one formula, one standard of diligence applied to every property before it reaches a partner's desk.</p>
+        <p>If that sounds like the kind of ally you want in a deal &mdash; as a lender, an investor, or a seller &mdash; reach out below.</p>
+        <p class="sign">&mdash; Adam</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="bizcard">
+      <img class="bizcard-avatar" src="assets/business-card.png" alt="Adam Stevens &mdash; A.S. LLC, Capital That Closes" width="1311" height="1134">
+      <div class="bizcard-text">
+        <span class="label">Digital Business Card</span>
+        <p>Save Adam's contact info and connect instantly.</p>
+      </div>
+      <a class="cta primary" href="https://blinq.me/LKMnCJ0E6kvU" target="_blank" rel="noopener">View &amp; Save Contact</a>
+    </div>
+    <div class="foot-grid">
+      <div>Allyship Solutions, LLC &middot; Richmond, VA</div>
+      <div><a href="tel:+18044460714">(804) 446-0714</a></div>
+      <div><a href="mailto:info@allyshipsolutionsllc.com">info@allyshipsolutionsllc.com</a></div>
+    </div>
+  </div>
+</footer>
+
